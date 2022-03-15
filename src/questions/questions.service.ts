@@ -32,7 +32,6 @@ export class QuestionsService {
       tags,
       auth,
     );
-    console.log('persisting tags');
 
     return await this.questionRepository.save(question);
   }
@@ -75,15 +74,19 @@ export class QuestionsService {
     if (question == null) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
+    let loadedTags: Tag[] = null;
+    if (updateQuestionDto.tags != null) {
+      loadedTags = await this.tagsService.findList(updateQuestionDto.tags);
+    }
 
-    let loadedTags: Tag[] = await this.tagsService.findList(
-      updateQuestionDto.tags,
+    await this.questionRepository.update(
+      { id: question.id },
+      {
+        title: updateQuestionDto.title,
+        text: updateQuestionDto.text,
+        tags: loadedTags,
+      },
     );
-    await this.questionRepository.update(question.id, {
-      title: updateQuestionDto.title,
-      text: updateQuestionDto.text,
-      tags: loadedTags,
-    });
   }
 
   async remove(id: number) {
