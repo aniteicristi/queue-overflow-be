@@ -6,13 +6,12 @@ import { Public } from './public.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService){}
+  constructor(private authService: AuthService) {}
 
-  //! Should be called with payload username and password!
-  @Public()
-  @UseGuards(LocalAuthGuard)
   @Post('/login')
+  @UseGuards(LocalAuthGuard)
+  @Public()
   async login(@Request() req) {
-    return this.authService.login(req);
+    return this.authService.login(req.user);
   }
 }

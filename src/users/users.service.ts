@@ -39,7 +39,7 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    let user: User = await this.userRepository.findOne(id);
+    let user: User = await this.userRepository.findOne({ id: id });
 
     if (user == null) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);

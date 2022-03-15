@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { QuestionsModule } from './questions/questions.module';
 import { TagsModule } from './tags/tags.module';
@@ -20,6 +19,7 @@ import { VotesModule } from './votes/votes.module';
       entities: [],
       synchronize: true,
       autoLoadEntities: true,
+      debug: true,
     }),
     UsersModule,
     AuthModule,

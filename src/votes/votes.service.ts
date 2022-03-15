@@ -21,11 +21,10 @@ export class VotesService {
     @InjectRepository(AnswerVote)
     private answerVoteRepository: Repository<AnswerVote>,
 
-    @Inject()
     private readonly userService: UsersService,
-    @Inject()
+
     private readonly questionService: QuestionsService,
-    @Inject()
+
     private readonly answerService: AnswersService,
   ) {}
 

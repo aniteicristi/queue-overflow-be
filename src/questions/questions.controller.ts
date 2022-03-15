@@ -12,6 +12,8 @@ import {
 import { QuestionsService } from './questions.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
+import { Roles } from 'src/auth/roles.decorator';
+import { UserRole } from 'src/users/entities/user.entity';
 
 @Controller('questions')
 export class QuestionsController {
@@ -19,7 +21,8 @@ export class QuestionsController {
 
   @Post()
   create(@Body() createQuestionDto: CreateQuestionDto, @Req() req: any) {
-    return this.questionsService.create(createQuestionDto, req.id);
+    console.log(req);
+    return this.questionsService.create(createQuestionDto, req.user.id);
   }
 
   @Get('tag/:tag')
@@ -51,6 +54,7 @@ export class QuestionsController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.MODERATOR)
   remove(@Param('id') id: string) {
     return this.questionsService.remove(+id);
   }

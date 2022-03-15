@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { Roles } from 'src/auth/roles.decorator';
+import { UserRole } from 'src/users/entities/user.entity';
 import { AnswersService } from './answers.service';
 import { CreateAnswerDto } from './dto/create-answer.dto';
 import { UpdateAnswerDto } from './dto/update-answer.dto';
@@ -23,6 +33,7 @@ export class AnswersController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.MODERATOR)
   remove(@Param('id') id: string) {
     return this.answersService.remove(+id);
   }
