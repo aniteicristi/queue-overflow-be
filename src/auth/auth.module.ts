@@ -25,9 +25,8 @@ import { IsModerator } from './is-moderator.guard';
     LocalStrategy,
     JwtStrategy,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-    IsModerator,
   ],
   controllers: [AuthController],
-  exports: [AuthService, IsModerator],
+  exports: [AuthService],
 })
 export class AuthModule {}

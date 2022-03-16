@@ -24,7 +24,9 @@ export class AnswersService {
   ) {}
 
   async create(createAnswerDto: CreateAnswerDto, authorId: number) {
+    console.log('fetch author');
     let author: User = await this.userService.findOne(authorId);
+    console.log('fetch question');
     let question: Question = await this.questionService.findOne(
       createAnswerDto.question,
     );

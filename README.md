@@ -1,68 +1,14 @@
-<style>
-.get {
-  display: inline-block;
-  padding: 0 5px;
-  height: 25px;
-  font-size: 16px;
-  line-height: 25px;
-  border-radius: 25px;
-  background-color: #00ff00;
-  color: black;
-  font-weight: bold;
-  margin-right: 15px;
-  margin-top:10px;
-}
-.post {
-  display: inline-block;
-  padding: 0 5px;
-  height: 25px;
-  font-size: 16px;
-  line-height: 25px;
-  border-radius: 25px;
-  background-color: #ffff00;
-  color: black;
-  font-weight: bold;
-  margin-right: 15px;
-  margin-top:10px;
-}
-.patch {
-  display: inline-block;
-  padding: 0 5px;
-  height: 25px;
-  font-size: 16px;
-  line-height: 25px;
-  border-radius: 25px;
-  background-color: #0000ff;
-  color: black;
-  font-weight: bold;
-  margin-right: 15px;
-  margin-top:10px;
-}
-.delete {
-  display: inline-block;
-  padding: 0 5px;
-  height: 25px;
-  font-size: 16px;
-  line-height: 25px;
-  border-radius: 25px;
-  background-color: #ff0000;
-  color: black;
-  font-weight: bold;
-  margin-right: 15px;
-  margin-top:10px;
-}
-</style>
 
 
 
 <p align="center">
-  <img src="https://www.utcluj.ro/static/old/img/UT_R_02.png", width="320" alt="Queue overflow Logo" />
+  <img src="./docs/resources/UT.png", width="320" alt="Queue overflow Logo" />
   <h1 align="center">QUEUE OVERFLOW</h1>
 </p>
 
 ## Instalation
 
-Make sure that you have node installed before attempting to run this project. After you installed node, you can run the bellow command in the folder of the project to install all of the dependencies.
+Make sure that you have node installed before attempting to run this project. After you installed node, you can run the bellow command in the root folder of the project to install all of the dependencies.
 
 ```bash
 $ npm install
@@ -71,10 +17,11 @@ $ npm install
 You also need to have an instance of maria DB to connect to, as well as a test database. The database can be
 configured in the [main module of the application](./src/app.module.ts).
 
-You can generate and seed a test database by running [this script](./generateDb). This database will contain two already created users:
+You can generate and seed a test database by running [this script](./dbdump.sql). This database will contain two already created users:
 
 - A normal user with email: `testuser@gmail.com` and password `testpassword`
 - A moderator user with email: `testmoderator@gmail.com` and password `testpassword`
+- A normal user with email: `testotheruser@gmail.com` and password `testpassword`
 
 ## Running the app
 
@@ -90,6 +37,14 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+# Sturucture of the Database
+
+The database contains 7 tables to persist and connect all our data our app requires.
+
+<p align="center">
+<img src="./docs/resources/db.png" alt="Database Diagram" width="600">
+</p>
 
 # Structure of the project.
 
@@ -111,7 +66,7 @@ To easely access all the resources any component in any layer needs, nestJS impl
 - **Providers:** define the providers (services / helpers / etc...) that can be imported by other modules.
 - **Controllers:** define the controllers that our module exports to the app.
 
-Our app is characterized by five main domains or functionalities:
+Our app is characterized by six main domains or functionalities:
 
 - **Users**: Handles all CRUD operations regarding users
 - **Questions**: Handles all CRUD operations regarding questions 
@@ -501,6 +456,8 @@ The diagram for the answers is similar to the one from the questions module. It 
 
 - Can return `BAD_REQUEST` if body is improperly formated.
 
+- Can return `NOT_FOUND` if provided question doesn't exist.
+
 > The author id can be **ommited** because it can be extracted from the Bearer token.
 
 Sample **body**
@@ -615,3 +572,59 @@ Sample **body**
 }
 ```
 > On success, returns the clout of the voted answer
+
+
+<style>
+.get {
+  display: inline-block;
+  padding: 0 5px;
+  height: 25px;
+  font-size: 16px;
+  line-height: 25px;
+  border-radius: 25px;
+  background-color: #00ff00;
+  color: black;
+  font-weight: bold;
+  margin-right: 15px;
+  margin-top:10px;
+}
+.post {
+  display: inline-block;
+  padding: 0 5px;
+  height: 25px;
+  font-size: 16px;
+  line-height: 25px;
+  border-radius: 25px;
+  background-color: #ffff00;
+  color: black;
+  font-weight: bold;
+  margin-right: 15px;
+  margin-top:10px;
+}
+.patch {
+  display: inline-block;
+  padding: 0 5px;
+  height: 25px;
+  font-size: 16px;
+  line-height: 25px;
+  border-radius: 25px;
+  background-color: #0000ff;
+  color: black;
+  font-weight: bold;
+  margin-right: 15px;
+  margin-top:10px;
+}
+.delete {
+  display: inline-block;
+  padding: 0 5px;
+  height: 25px;
+  font-size: 16px;
+  line-height: 25px;
+  border-radius: 25px;
+  background-color: #ff0000;
+  color: black;
+  font-weight: bold;
+  margin-right: 15px;
+  margin-top:10px;
+}
+</style>
