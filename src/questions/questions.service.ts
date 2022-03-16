@@ -7,7 +7,7 @@ import { Like, Repository } from 'typeorm';
 import { Tag } from 'src/tags/entities/tag.entity';
 import { TagsService } from 'src/tags/tags.service';
 import { UsersService } from 'src/users/users.service';
-import { User } from 'src/users/entities/user.entity';
+import { User, UserRole } from 'src/users/entities/user.entity';
 import { Answer } from 'src/answers/entities/answer.entity';
 
 @Injectable()
@@ -37,8 +37,8 @@ export class QuestionsService {
   }
 
   async findAll() {
-    return (await this.questionRepository.find({ relations: ['author'] }))
-      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+    return (await this.questionRepository.find())
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .map(({ answers, ...result }) => result);
   }
 
@@ -48,13 +48,13 @@ export class QuestionsService {
         title: Like(`%${partialString}%`),
       })
     )
-      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .map(({ answers, ...result }) => result);
   }
 
   async findByTag(tag: string) {
     return (await this.tagsService.taggedQuestions(tag))
-      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       .map(({ answers, ...result }) => result);
   }
 
@@ -78,15 +78,14 @@ export class QuestionsService {
     if (updateQuestionDto.tags != null) {
       loadedTags = await this.tagsService.findList(updateQuestionDto.tags);
     }
+    if (updateQuestionDto.text != null) {
+      question.text = updateQuestionDto.text;
+    }
+    if (loadedTags != null) {
+      question.tags = loadedTags;
+    }
 
-    await this.questionRepository.update(
-      { id: question.id },
-      {
-        title: updateQuestionDto.title,
-        text: updateQuestionDto.text,
-        tags: loadedTags,
-      },
-    );
+    await this.questionRepository.save(question);
   }
 
   async remove(id: number) {

@@ -17,7 +17,7 @@ export class Question {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.questions)
+  @ManyToOne(() => User, (user) => user.questions, { eager: true })
   author: User;
 
   @Column()
@@ -29,7 +29,7 @@ export class Question {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @ManyToMany(() => Tag, { eager: true, cascade: true })
+  @ManyToMany(() => Tag, (tag) => tag.questions, { eager: true, cascade: true })
   @JoinTable()
   tags: Tag[];
 

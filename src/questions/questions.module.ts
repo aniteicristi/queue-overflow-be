@@ -5,11 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Question } from './entities/question.entity';
 import { TagsModule } from 'src/tags/tags.module';
 import { UsersModule } from 'src/users/users.module';
+import { AllowSelfOrModerator } from './guards/allow-self-or-moderator.guard';
+import { Reflector } from '@nestjs/core';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Question]), TagsModule, UsersModule],
+  imports: [
+    TypeOrmModule.forFeature([Question]),
+    TagsModule,
+    UsersModule,
+    Reflector,
+  ],
   controllers: [QuestionsController],
-  providers: [QuestionsService],
+  providers: [QuestionsService, AllowSelfOrModerator],
   exports: [TypeOrmModule.forFeature([Question]), QuestionsService],
 })
 export class QuestionsModule {}

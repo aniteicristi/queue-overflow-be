@@ -1,20 +1,12 @@
-import { IsAlpha, IsIn, IsNotEmpty } from 'class-validator';
+import { IsIn, IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateQuestionVoteDto {
-  @IsAlpha()
+  @IsInt()
   @IsNotEmpty()
   questionId: number;
 
   @IsNotEmpty()
-  @IsAlpha()
+  @IsInt()
   @IsIn([-1, 1])
   amount: number;
-
-  @IsAlpha()
-  @IsNotEmpty()
-  userFrom: number;
-
-  @IsAlpha()
-  @IsNotEmpty()
-  userTo: number;
 }

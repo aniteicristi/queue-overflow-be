@@ -29,9 +29,12 @@ export class TagsService {
   }
 
   async taggedQuestions(tag: string): Promise<Question[]> {
-    let dbTag: Tag = await this.tagsRepository.findOne(tag, {
-      relations: ['questions'],
-    });
+    let dbTag: Tag = await this.tagsRepository.findOne(
+      { identifier: tag },
+      {
+        relations: ['questions'],
+      },
+    );
     return dbTag.questions;
   }
 }

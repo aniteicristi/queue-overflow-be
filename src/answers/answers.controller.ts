@@ -6,20 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
-import { Roles } from 'src/auth/roles.decorator';
-import { UserRole } from 'src/users/entities/user.entity';
 import { AnswersService } from './answers.service';
 import { CreateAnswerDto } from './dto/create-answer.dto';
 import { UpdateAnswerDto } from './dto/update-answer.dto';
+import { AllowSelfOrModerator } from './guards/allow-self-or-moderator.guard';
 
 @Controller('answers')
 export class AnswersController {
   constructor(private readonly answersService: AnswersService) {}
 
   @Post()
-  create(@Body() createAnswerDto: CreateAnswerDto) {
-    return this.answersService.create(createAnswerDto);
+  create(@Body() createAnswerDto: CreateAnswerDto, @Req() req: any) {
+    return this.answersService.create(createAnswerDto, req.user.id);
   }
 
   @Get(':id')
@@ -28,12 +29,13 @@ export class AnswersController {
   }
 
   @Patch(':id')
+  @UseGuards(AllowSelfOrModerator)
   update(@Param('id') id: string, @Body() updateAnswerDto: UpdateAnswerDto) {
     return this.answersService.update(+id, updateAnswerDto);
   }
 
   @Delete(':id')
-  @Roles(UserRole.MODERATOR)
+  @UseGuards(AllowSelfOrModerator)
   remove(@Param('id') id: string) {
     return this.answersService.remove(+id);
   }

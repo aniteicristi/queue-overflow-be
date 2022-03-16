@@ -1,13 +1,12 @@
-import { IsNotEmpty } from "class-validator";
+import { IsInt, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class CreateAnswerDto {
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(60000)
+  text: string;
 
   @IsNotEmpty()
-  author:number;
-
-  @IsNotEmpty()
-  text:string;
-
-  @IsNotEmpty()
-  question:number
+  @IsInt()
+  question: number;
 }

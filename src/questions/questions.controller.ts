@@ -12,8 +12,8 @@ import {
 import { QuestionsService } from './questions.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
-import { Roles } from 'src/auth/roles.decorator';
-import { UserRole } from 'src/users/entities/user.entity';
+import { AllowSelfOrModerator } from './guards/allow-self-or-moderator.guard';
+import { IsModerator } from 'src/auth/is-moderator.guard';
 
 @Controller('questions')
 export class QuestionsController {
@@ -46,6 +46,7 @@ export class QuestionsController {
   }
 
   @Patch(':id')
+  @UseGuards(AllowSelfOrModerator)
   update(
     @Param('id') id: string,
     @Body() updateQuestionDto: UpdateQuestionDto,
@@ -54,7 +55,7 @@ export class QuestionsController {
   }
 
   @Delete(':id')
-  @Roles(UserRole.MODERATOR)
+  @UseGuards(IsModerator)
   remove(@Param('id') id: string) {
     return this.questionsService.remove(+id);
   }

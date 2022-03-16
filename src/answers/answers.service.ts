@@ -23,8 +23,8 @@ export class AnswersService {
     private readonly userService: UsersService,
   ) {}
 
-  async create(createAnswerDto: CreateAnswerDto) {
-    let author: User = await this.userService.findOne(createAnswerDto.author);
+  async create(createAnswerDto: CreateAnswerDto, authorId: number) {
+    let author: User = await this.userService.findOne(authorId);
     let question: Question = await this.questionService.findOne(
       createAnswerDto.question,
     );
@@ -41,9 +41,8 @@ export class AnswersService {
     if (answer == null) {
       throw new NotFoundException();
     }
-    await this.answersRepository.update(id, {
-      text: updateAnswerDto.text,
-    });
+    answer.text = updateAnswerDto.text;
+    await this.answersRepository.save(answer);
   }
 
   async remove(id: number) {
@@ -54,7 +53,6 @@ export class AnswersService {
     await this.answersRepository.remove(answer);
   }
 
-  //TODO make users be able to vote only once.
   async vote(id: number, arg: number) {
     this.answersRepository.increment({ id: id }, 'clout', arg);
   }

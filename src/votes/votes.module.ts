@@ -7,7 +7,8 @@ import { QuestionVote } from './entities/question-vote.entity';
 import { UsersModule } from 'src/users/users.module';
 import { QuestionsModule } from 'src/questions/questions.module';
 import { AnswersModule } from 'src/answers/answers.module';
-import { DisallowSelfGuard } from './guards/disallow-self.guard';
+import { DisallowSelfQuestionGuard } from './guards/disallow-self-question.guard';
+import { DisallowSelfAnswerGuard } from './guards/disallow-self-answer.guard';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { DisallowSelfGuard } from './guards/disallow-self.guard';
     AnswersModule,
   ],
   controllers: [VotesController],
-  providers: [VotesService, DisallowSelfGuard],
+  providers: [VotesService, DisallowSelfQuestionGuard, DisallowSelfAnswerGuard],
 })
 export class VotesModule {}

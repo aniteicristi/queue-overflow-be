@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AnswersService } from 'src/answers/answers.service';
 import { Answer } from 'src/answers/entities/answer.entity';
@@ -29,11 +29,14 @@ export class VotesService {
   ) {}
 
   //! Returns the questions score!
-  async voteQuestion(createVoteDto: CreateQuestionVoteDto) {
+  async voteQuestion(createVoteDto: CreateQuestionVoteDto, userFromId: number) {
+    let question: Question = await this.questionService.findOne(
+      createVoteDto.questionId,
+    );
     let vote: QuestionVote = await this.questionVoteRepository.findOne({
       where: {
-        userFrom: { id: createVoteDto.userFrom },
-        userTo: { id: createVoteDto.userTo },
+        userFrom: { id: userFromId },
+        userTo: { id: question.author.id },
         question: { id: createVoteDto.questionId },
       },
       relations: ['userFrom', 'userTo', 'question'],
@@ -55,13 +58,8 @@ export class VotesService {
 
       return vote.question.clout + createVoteDto.amount * 2;
     } else {
-      let userFrom: User = await this.userService.findOne(
-        createVoteDto.userFrom,
-      );
-      let userTo: User = await this.userService.findOne(createVoteDto.userTo);
-      let question: Question = await this.questionService.findOne(
-        createVoteDto.questionId,
-      );
+      let userFrom: User = await this.userService.findOne(userFromId);
+      let userTo: User = await this.userService.findOne(question.author.id);
 
       vote = new QuestionVote(userFrom, userTo, question, createVoteDto.amount);
       this.questionService.vote(vote.question.id, vote.amount);
@@ -73,11 +71,14 @@ export class VotesService {
     }
   }
   //! Returns the answers score!
-  async voteAnswer(createVoteDto: CreateAnswerVoteDto) {
+  async voteAnswer(createVoteDto: CreateAnswerVoteDto, userFromId: number) {
+    let answer: Answer = await this.answerService.findOne(
+      createVoteDto.answerId,
+    );
     let vote: AnswerVote = await this.answerVoteRepository.findOne({
       where: {
-        userFrom: { id: createVoteDto.userFrom },
-        userTo: { id: createVoteDto.userTo },
+        userFrom: { id: userFromId },
+        userTo: { id: answer.author.id },
         answer: { id: createVoteDto.answerId },
       },
       relations: ['userFrom', 'userTo', 'answer'],
@@ -103,22 +104,17 @@ export class VotesService {
 
       return vote.answer.clout + createVoteDto.amount * 2;
     } else {
-      let userFrom: User = await this.userService.findOne(
-        createVoteDto.userFrom,
-      );
-      let userTo: User = await this.userService.findOne(createVoteDto.userTo);
-      let answer: Answer = await this.answerService.findOne(
-        createVoteDto.answerId,
-      );
+      let userFrom: User = await this.userService.findOne(userFromId);
+      let userTo: User = await this.userService.findOne(answer.author.id);
 
       vote = new AnswerVote(userFrom, userTo, answer, createVoteDto.amount);
-      this.questionService.vote(vote.answer.id, vote.amount);
+      this.answerService.vote(vote.answer.id, vote.amount);
 
       this.userService.score(vote.userTo.id, vote.amount < 0 ? -2 : 10);
 
       if (vote.amount < 0) this.userService.score(vote.userFrom.id, -1);
 
-      await this.questionVoteRepository.save(vote);
+      await this.answerVoteRepository.save(vote);
       return vote.answer.clout + createVoteDto.amount;
     }
   }

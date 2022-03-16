@@ -9,8 +9,7 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { RolesGuard } from './roles.guard';
-import { Roles } from './roles.decorator';
+import { IsModerator } from './is-moderator.guard';
 
 @Module({
   imports: [
@@ -26,9 +25,9 @@ import { Roles } from './roles.decorator';
     LocalStrategy,
     JwtStrategy,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_GUARD, useClass: RolesGuard },
+    IsModerator,
   ],
   controllers: [AuthController],
-  exports: [AuthService],
+  exports: [AuthService, IsModerator],
 })
 export class AuthModule {}
