@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { IsModerator } from './is-moderator.guard';
+import { IsNotBannedGuard } from './isnotbanned.guard';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { IsModerator } from './is-moderator.guard';
     JwtStrategy,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     IsModerator,
+    { provide: APP_GUARD, useClass: IsNotBannedGuard },
   ],
   controllers: [AuthController],
   exports: [AuthService, IsModerator],

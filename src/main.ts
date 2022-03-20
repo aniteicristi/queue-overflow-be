@@ -1,11 +1,12 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { IsModerator } from './auth/is-moderator.guard';
+import { IsNotBannedGuard } from './auth/isnotbanned.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(new Reflector()));
   await app.listen(3000);
 }
 bootstrap();

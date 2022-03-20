@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -28,6 +28,9 @@ export class AuthService {
       id: user.id,
       role: user.role,
     };
+    if (payload.role == 'banned') {
+      throw new ForbiddenException('User is banned');
+    }
     return {
       token: this.jwtService.sign(payload),
     };

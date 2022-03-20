@@ -9,10 +9,12 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { Question } from 'src/questions/entities/question.entity';
 import { Answer } from 'src/answers/entities/answer.entity';
+import { Exclude } from 'class-transformer';
 
 export enum UserRole {
   NORMAL = 'normal',
   MODERATOR = 'moderator',
+  BANNED = 'banned',
 }
 
 @Entity()
@@ -25,6 +27,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude({ toPlainOnly: true })
   passwordHash: string;
 
   @Column({
