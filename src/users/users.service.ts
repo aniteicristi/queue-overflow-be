@@ -8,14 +8,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private mailService: MailService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -75,5 +77,16 @@ export class UsersService {
 
   async score(id: number, arg: number) {
     this.userRepository.increment({ id: id }, 'score', arg);
+  }
+
+  async ban(id: number, reason: string) {
+    let user: User = await this.userRepository.findOne(id);
+
+    if (user == null) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+    user.role = UserRole.BANNED;
+    await this.userRepository.save(user);
+    this.mailService.sentUserBanNotification(user, reason);
   }
 }

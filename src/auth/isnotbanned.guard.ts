@@ -24,7 +24,6 @@ export class IsNotBannedGuard implements CanActivate {
     if (isPublic) {
       return true;
     }
-    console.log(context.switchToHttp().getRequest());
     const id = context.switchToHttp().getRequest().user.id;
     const user: User = await this.userService.findOne(id);
     if (user.role == UserRole.BANNED) return false;

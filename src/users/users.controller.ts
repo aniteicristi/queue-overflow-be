@@ -19,6 +19,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { Public } from 'src/auth/public.decorator';
 import { IsModerator } from 'src/auth/is-moderator.guard';
+import { BanUserDTO } from './dto/ban-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -50,5 +51,11 @@ export class UsersController {
   @UseGuards(IsModerator)
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Patch('/ban/:id')
+  @UseGuards(IsModerator)
+  ban(@Param('id') id: string, @Body() body: BanUserDTO) {
+    return this.usersService.ban(+id, body.reason);
   }
 }
