@@ -26,10 +26,13 @@ import { IsNotBannedGuard } from './isnotbanned.guard';
     LocalStrategy,
     JwtStrategy,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+<<<<<<< HEAD
     IsModerator,
     { provide: APP_GUARD, useClass: IsNotBannedGuard },
+=======
+>>>>>>> c1e96d2eb9fc0d6c4c87cfa9f50038e95f4a2a79
   ],
   controllers: [AuthController],
-  exports: [AuthService, IsModerator],
+  exports: [AuthService],
 })
 export class AuthModule {}
