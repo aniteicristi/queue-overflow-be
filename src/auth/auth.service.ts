@@ -15,6 +15,7 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<User> {
     const dbUser = await this.userRepository.findOne({ email: username });
+    console.log(dbUser);
     if (dbUser && compareHash(password, dbUser.passwordHash)) {
       return dbUser;
     } else {

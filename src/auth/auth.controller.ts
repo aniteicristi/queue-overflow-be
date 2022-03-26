@@ -8,9 +8,9 @@ import { Public } from './public.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/login')
-  @UseGuards(LocalAuthGuard)
   @Public()
+  @UseGuards(LocalAuthGuard)
+  @Post('/login')
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
