@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AnswersService } from 'src/answers/answers.service';
 import { Answer } from 'src/answers/entities/answer.entity';
@@ -27,6 +32,28 @@ export class VotesService {
 
     private readonly answerService: AnswersService,
   ) {}
+
+  async findVoteQuestion(id: number, user: number) {
+    let vote = await this.questionVoteRepository.findOne({
+      where: {
+        question: id,
+        userFrom: user,
+      },
+    });
+    if (vote == null) return {};
+    else return { isLiked: vote.amount == 1 };
+  }
+
+  async findVoteAnswer(id: number, user: number) {
+    let vote = await this.answerVoteRepository.findOne({
+      where: {
+        answer: id,
+        userFrom: user,
+      },
+    });
+    if (vote == null) return {};
+    else return { isLiked: vote.amount == 1 };
+  }
 
   //! Returns the questions score!
   async voteQuestion(createVoteDto: CreateQuestionVoteDto, userFromId: number) {

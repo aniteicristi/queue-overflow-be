@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
@@ -9,6 +15,7 @@ import { TagsService } from 'src/tags/tags.service';
 import { UsersService } from 'src/users/users.service';
 import { User, UserRole } from 'src/users/entities/user.entity';
 import { Answer } from 'src/answers/entities/answer.entity';
+import { VotesService } from 'src/votes/votes.service';
 
 @Injectable()
 export class QuestionsService {

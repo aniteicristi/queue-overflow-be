@@ -242,6 +242,21 @@ Sample output
 }
 ```
 
+<p class="get">GET</p> localhost:3000/auth/self
+
+### Returns the self user object.
+
+- Can return `BAD_REQUEST` if body is improperly formated.
+
+Sample output
+```JSON
+{
+    "id": 4,
+    "email": "testuser@gmail.com",
+    "role": "normal"
+}
+```
+
 ## Questions
 
 The questions module handles CRUD operations on questions. The user can create, retrieve questions, update a question or delete it if he is an `MODERATOR`. It relies on the Tags module as well for creation and persistance of tags.
@@ -572,6 +587,22 @@ Sample **body**
 }
 ```
 > On success, returns the clout of the voted answer
+
+<p class="get">GET</p> localhost:3000/votes/?question=questionid&answer=answerid
+
+### Given a query consisting of a question id or an answer id and a user id, it returns wether there exists a vote on that particular question or answer by the specified user.
+
+- Can return `BAD_REQUEST` if query is missing `answer` and `question` 
+
+> The voting user can be **ommited** because it can be extracted from the Bearer token.
+
+Sample **body**
+```JSON
+{
+    "isLiked": true
+}
+```
+> On success, returns an object with a single field called `isLiked` which can be either true, false or undefined.
 
 
 <style>

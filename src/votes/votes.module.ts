@@ -19,5 +19,6 @@ import { DisallowSelfAnswerGuard } from './guards/disallow-self-answer.guard';
   ],
   controllers: [VotesController],
   providers: [VotesService, DisallowSelfQuestionGuard, DisallowSelfAnswerGuard],
+  exports: [VotesService],
 })
 export class VotesModule {}
