@@ -20,7 +20,9 @@ export class Answer {
   @ManyToOne(() => User, (user) => user.answers, { eager: true })
   author: User;
 
-  @ManyToOne(() => Question, (question) => question.answers)
+  @ManyToOne(() => Question, (question) => question.answers, {
+    onDelete: 'CASCADE',
+  })
   question: Question;
 
   @Column({ default: 0 })

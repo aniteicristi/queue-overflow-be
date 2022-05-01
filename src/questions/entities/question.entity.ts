@@ -1,6 +1,7 @@
 import { Answer } from 'src/answers/entities/answer.entity';
 import { Tag } from 'src/tags/entities/tag.entity';
 import { User } from 'src/users/entities/user.entity';
+import { QuestionVote } from 'src/votes/entities/question-vote.entity';
 import {
   Column,
   Entity,
@@ -33,7 +34,7 @@ export class Question {
   @JoinTable()
   tags: Tag[];
 
-  @OneToMany(() => Answer, (answer) => answer.question)
+  @OneToMany(() => Answer, (answer) => answer.question, { cascade: true })
   answers: Answer[];
 
   @Column({ default: 0 })

@@ -23,6 +23,8 @@ export class QuestionVote {
   @Column()
   amount: number;
 
-  @ManyToOne(() => Question)
+  @ManyToOne(() => Question, {
+    onDelete: 'CASCADE',
+  })
   question: Question;
 }

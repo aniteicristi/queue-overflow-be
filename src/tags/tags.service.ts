@@ -35,6 +35,7 @@ export class TagsService {
         relations: ['questions'],
       },
     );
+    if (dbTag == null) return [];
     return dbTag.questions;
   }
 }
